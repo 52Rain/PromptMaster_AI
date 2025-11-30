@@ -1,0 +1,5 @@
+{
+  "name": "PromptMaster AI",
+  "description": "一款高级提示词工程工具，基于 PTCF、CRISPE 和 CO-STAR 等专家框架，将自然语言转化为结构化、高质量的 AI 提示词。",
+  "requestFramePermissions": []
+}
