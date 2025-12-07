@@ -1,33 +1,31 @@
-import path from 'path';
-import { defineConfig, loadEnv } from 'vite';
-import react from '@vitejs/plugin-react';
+name: Deploy Vite Project to GitHub Pages
 
-export default defineConfig(({ mode }) => {
-  const env = loadEnv(mode, '.', '');
-  
-  // 设置 base 属性为 GitHub 仓库名称（子路径）
-  const REPO_NAME = 'PromptMaster_AI'; 
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
 
-  return {
-    // 关键修复：所有配置项都必须在这个对象内
-    base: `/${REPO_NAME}/`, // 👈 部署到 GitHub Pages 必需
-    
-    server: { // 👈 现在它正确地在配置对象内
-      port: 3000,
-      host: '0.0.0.0',
-    },
-    
-    plugins: [react()],
-    
-    define: {
-      'process.env.API_KEY': JSON.stringify(env.GEMINI_API_KEY),
-      'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
-    },
-    
-    resolve: {
-      alias: {
-        '@': path.resolve(__dirname, '.'),
-      },
-    },
-  };
-});
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Dependencies
+        run: npm install 
+
+      - name: Build Project
+        run: npm run build 
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist 
+          publish_branch: gh-pages
