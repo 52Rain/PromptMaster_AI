@@ -29,4 +29,4 @@ export default defineConfig(({ mode }) => {
       },
     },
   }; // 👈 配置对象结束
-}); // 👈 defineConfig 结束
+});
