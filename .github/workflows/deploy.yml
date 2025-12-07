@@ -1,0 +1,35 @@
+name: Deploy Vite Project to GitHub Pages
+
+on:
+  # 在 push 到 main/master 分支时触发
+  push:
+    branches: [main, master]
+  # 允许手动从 Actions 标签页运行此工作流
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # 使用推荐的 Node.js 版本
+
+      - name: Install Dependencies
+        # 运行 npm install 安装 package.json 中列出的所有依赖
+        run: npm install 
+
+      - name: Build Project
+        # 运行构建命令，该命令会执行 Vite 并生成 dist 文件夹
+        run: npm run build 
+
+      # 使用 gh-pages action 部署 dist 文件夹
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist # 指定发布由 npm run build 生成的 dist 文件夹
