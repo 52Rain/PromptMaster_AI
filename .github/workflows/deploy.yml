@@ -10,9 +10,9 @@ export default defineConfig(({ mode }) => {
 
   return {
     // 关键修复：所有配置项都必须在这个对象内
-    base: '/${REPO_NAME}/',
+    base: `/${REPO_NAME}/`, // 👈 部署到 GitHub Pages 必需
     
-    server: { // 现在它正确地在配置对象内
+    server: { // 👈 现在它正确地在配置对象内
       port: 3000,
       host: '0.0.0.0',
     },
